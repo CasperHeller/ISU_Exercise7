@@ -1,7 +1,10 @@
-
 #pragma once
 
+#include <iostream>
+#include <queue>
 #include "Message.h"
+
+using namespace std;
 
 class MsgQueue
 {
@@ -11,6 +14,12 @@ public:
   Message* receive(unsigned long &id);
   ~MsgQueue();
 private:
-  //Container with the queue
-  //Other relevant variables
+  queue<item> itemQueue_;
+  unsigned long size_;
+  
+  struct Item
+  {
+    unsigned long id_;
+    Message* msg_;
+  };
 };
