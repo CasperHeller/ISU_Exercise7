@@ -20,7 +20,7 @@ void MsgQueue::send(unsigned long id, Message* msg)
 {
     pthread_mutex_lock(&mQMutex);
 
-    //Venter indtil køen ikke er fuld
+    //Venter på en plads i køen
     while (itemQueue_.size() >= size_)
     {
         pthread_cond_wait(&mQCond, &mQMutex);
@@ -31,7 +31,7 @@ void MsgQueue::send(unsigned long id, Message* msg)
     newItem.msg_ = msg;
     newItem.id_ = id;
     
-    //Sender objektet
+    //Sender objektet til køen
     itemQueue_.push(newItem);
 
     pthread_cond_signal(&mQCond);
@@ -42,7 +42,7 @@ Message* MsgQueue::receive(unsigned long& id)
 {
     pthread_mutex_lock(&mQMutex);
 
-    //Venter indtil køen ikke er tom
+    //Venter på der er noget i køen
     while (itemQueue_.empty())
     {
         pthread_cond_wait(&mQCond, &mQMutex);
@@ -73,4 +73,6 @@ MsgQueue::~MsgQueue()
     {
         cout << "Error destroying conditional: " << err << endl;
     }
+    
+    //delete ???
 }

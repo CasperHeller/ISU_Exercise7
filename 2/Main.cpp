@@ -66,6 +66,7 @@ void *sender(void* data)
 {
   MsgQueue* myQueue = static_cast<MsgQueue*>(data);
   
+  //Seed til generering af tilfældige tal
   srand(time(NULL));
   
   for(;;)
