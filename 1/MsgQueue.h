@@ -14,12 +14,12 @@ public:
   Message* receive(unsigned long &id);
   ~MsgQueue();
 private:
-  queue<item> itemQueue_;
-  unsigned long size_;
-  
   struct Item
   {
     unsigned long id_;
     Message* msg_;
   };
+  
+  queue<Item> itemQueue_;
+  unsigned long size_;
 };
