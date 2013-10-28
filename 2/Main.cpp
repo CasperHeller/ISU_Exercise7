@@ -2,17 +2,9 @@
 #include <cstdlib>
 #include <unistd.h>
 #include "MsgQueue.h"
-#include "Message.h"
+#include "Point3D.h"
 
 using namespace std;
-
-//Struct
-struct Point3D : public Message
-{
-  int x;
-  int y;
-  int z;
-};
 
 //Enum
 enum
@@ -21,11 +13,11 @@ enum
 };
 
 //Konstanter
-const int MAX_QUEUE = 12;
-const int SLEEP_TIME = 2;
-const int MAX_X = 7;
-const int MAX_Y = 14;
-const int MAX_Z = 21;
+const int MAX_QUEUE = 7;
+const int SLEEP_TIME = 1;
+const int MAX_X = 25;
+const int MAX_Y = 50;
+const int MAX_Z = 75;
 
 //Prototyper
 void *sender(void* data);
@@ -72,16 +64,18 @@ int main()
 
 void *sender(void* data)
 {
-  MsgQueue *myQueue = static_cast<MsgQueue*> (data);
+  MsgQueue* myQueue = static_cast<MsgQueue*>(data);
+  
+  srand(time(NULL));
   
   for(;;)
   {
-    Point3D *P3D = new Point3D;
-    P3D->x = (rand()%MAX_X+1);
-    P3D->y = (rand()%MAX_Y+1);
-    P3D->z = (rand()%MAX_Z+1);
+    Point3D* P3D = new Point3D;
+    P3D->x = rand() % MAX_X + 1;
+    P3D->y = rand() % MAX_Y + 1;
+    P3D->z = rand() % MAX_Z + 1;
     
-    myQueue->send(ID_Point3D, static_cast<Message*> (P3D));
+    myQueue->send(ID_Point3D, static_cast<Message*>(P3D));
     
     sleep(SLEEP_TIME);
   }
@@ -91,14 +85,14 @@ void *sender(void* data)
 
 void *receiver(void* data)
 {
-  MsgQueue *myQueue = static_cast<MsgQueue*> (data);
+  MsgQueue* myQueue = static_cast<MsgQueue*>(data);
   
   for(;;)
   {
     unsigned long id;
-    Message *msg = myQueue->receive(id);
-    handler(msg, id);
-    delete msg;
+    Message* message = myQueue->receive(id);
+    handler(message, id);
+    delete message;
   }
   
   pthread_exit(NULL);
@@ -110,7 +104,7 @@ void handler(Message* msg, unsigned long id)
   {
     case ID_Point3D:
     {
-      Point3D* P3D = static_cast<Point3D*> (msg);
+      Point3D* P3D = static_cast<Point3D*>(msg);
       printPoint3D(P3D);
       break;
     }
