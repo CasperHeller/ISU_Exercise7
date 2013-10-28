@@ -1,10 +1,6 @@
 #include "MsgQueue.h"
 #include <pthread.h>
 
-// Mutex og conditional
-pthread_mutex_t mQMutex;
-pthread_cond_t mQCond;
-
 MsgQueue::MsgQueue(unsigned long maxSize)
 {
   size_ = maxSize;
@@ -55,8 +51,7 @@ Message* MsgQueue::receive(unsigned long &id)
   }
   
   //Læser den ældste i køen og fjerner den derefter
-  Item newItem;
-  newItem = itemQueue_.front();
+  Item newItem = itemQueue_.front();
   itemQueue_.pop();
   
   //Gemmer ID
@@ -71,7 +66,7 @@ Message* MsgQueue::receive(unsigned long &id)
 
 MsgQueue::~MsgQueue()
 {
-  delete &itemQueue_;
+  //delete &itemQueue_;
   
   int err;
   

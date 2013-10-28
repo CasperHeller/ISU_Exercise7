@@ -11,7 +11,7 @@ class MsgQueue
 public:
   MsgQueue(unsigned long maxSize);
   void send(unsigned long id, Message* msg = NULL);
-  Message* receive(unsigned long &id);
+  Message* receive(unsigned long& id);
   ~MsgQueue();
 private:
   struct Item
@@ -22,4 +22,6 @@ private:
   
   queue<Item> itemQueue_;
   unsigned long size_;
+  pthread_mutex_t mQMutex;
+  pthread_cond_t mQCond;
 };

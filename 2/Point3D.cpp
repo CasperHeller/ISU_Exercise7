@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <unistd.h>
 #include "MsgQueue.h"
+#include "Message.h"
 
 using namespace std;
 
@@ -20,17 +21,17 @@ enum
 };
 
 //Konstanter
-unsigned long MAX_QUEUE = 12;
-unsigned long SLEEP_TIME = 2;
-unsigned long MAX_X = 7;
-unsigned long MAX_Y = 14;
-unsigned long MAX_Z = 21;
+const int MAX_QUEUE = 12;
+const int SLEEP_TIME = 2;
+const int MAX_X = 7;
+const int MAX_Y = 14;
+const int MAX_Z = 21;
 
 //Prototyper
 void *sender(void* data);
 void *receiver(void* data);
-void printPoint3D(Point3D* point);
 void handler(Message* msg, unsigned long id);
+void printPoint3D(Point3D* point);
 
 int main()
 {
@@ -39,14 +40,14 @@ int main()
   int err;
   
   //senderThread
-  if( (err = pthread_create(&senderThread, NULL, sender, &myQueue)) != 0 )
+  if( (err = pthread_create(&senderThread, NULL, sender, static_cast<void*> (&myQueue))) != 0 )
   {
     cout << "Could not create senderThread! ERROR: " << err << endl;
     return EXIT_FAILURE;
   }
   
   //receiverThread
-  if( (err = pthread_create(&receiverThread, NULL, receiver, &myQueue)) != 0 )
+  if( (err = pthread_create(&receiverThread, NULL, receiver, static_cast<void*> (&myQueue))) != 0 )
   {
     cout << "Could not create receiverThread! ERROR: " << err << endl;
     return EXIT_FAILURE;
@@ -103,11 +104,6 @@ void *receiver(void* data)
   pthread_exit(NULL);
 }
 
-void printPoint3D(Point3D* point)
-{
-  cout << "The coordinates: (" << point->x << ", " << point->y << ", " << point->z << ")" << endl;
-}
-
 void handler(Message* msg, unsigned long id)
 {
   switch(id)
@@ -123,4 +119,9 @@ void handler(Message* msg, unsigned long id)
       cout << "The ID: " << id << " do not exist!" << endl;
       break;
     }
-  }
+}
+
+void printPoint3D(Point3D* point)
+{
+  cout << "The coordinates: (" << point->x << ", " << point->y << ", " << point->z << ")" << endl;
+}

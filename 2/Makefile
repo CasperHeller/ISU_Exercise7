@@ -1,4 +1,4 @@
-EXENAME   := point3d
+EXENAME   := main
 SOURCES   :=
 LD_FLAGS  := -pthread
 CXX_FLAGS := -Wall
