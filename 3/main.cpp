@@ -219,8 +219,8 @@ int main()
 	srand (time(NULL));
 
     // Entry and exit queue
-    MsgQueue entryMsgQueue(QUEUE_SIZE+1);
-    MsgQueue exitMsgQueue(QUEUE_SIZE+1);
+    MsgQueue entryMsgQueue(QUEUE_SIZE);
+    MsgQueue exitMsgQueue(QUEUE_SIZE);
 
     vector<MsgQueue> carMsgQueue(CAR_AMOUNT, MsgQueue(QUEUE_SIZE));
 
